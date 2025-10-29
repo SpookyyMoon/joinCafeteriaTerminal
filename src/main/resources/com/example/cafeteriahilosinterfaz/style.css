@@ -1,0 +1,23 @@
+.fondo {
+    -fx-background-image: url('raw/imagenCafeRE.jpg');
+    -fx-background-size: 1920px 1300px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.panel {
+    -fx-background-color: rgb(241, 235, 231);
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #B77466;
+    -fx-border-width: 2px;
+}
+
+.botonInicio {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #B77466;
+    -fx-border-width: 2px;
+    -fx-background-color: rgb(241, 235, 231);
+    -fx-cursor: pointer;
+}
