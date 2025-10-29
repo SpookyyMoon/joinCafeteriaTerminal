@@ -1,0 +1,189 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{enumitem}
+\setlist[itemize]{left=0pt, labelsep=1em, itemsep=0.5em}
+\setlist[enumerate]{left=0pt, labelsep=1em, itemsep=0.5em}
+
+
+\geometry{margin=2.5cm}
+\begin{document}
+    \begin{titlepage}
+    \centering
+    {\bfseries\LARGE Afondamento nas competencias profesionais\par}
+    \vspace{2cm}
+    {\scshape\Huge Documentación de Arquitectura de Software y Requisitos funcionales\par}
+    \vspace{1cm}
+    {\scshape\Large cafetería mediante hilos de Java\par}
+    \vspace{5cm}
+    \vfill
+    {\Large Jacobo Pérez de Torres\par}
+    \vfill
+    \end{titlepage}
+
+    \section{Introducción y descripción del problema}
+    Esta aplicación simula el funcionamiento de una cafetería empleando una interfaz generada en JavaFX y el módulo de
+    Thread de Java. Existen dos camareros (Hilos) que atienden concurrentemente a clientes (También hilos). Los clientes
+    llegan a la cafetería siguiendo el orden de la lista y con un retraso aleatorio (Entre 1-3 segundos).
+    Los clientes tienen un tiempo de espera máximo que pueden tardar en ser atendidos antes de abandonar el local sin su
+    café.
+
+    \vspace{0.5cm}
+
+    \noindent Cuando un camarero se libera de su trabajo escoge a el cliente que se encuentre primero en la lista (Organizada por orden
+    de llegada), una vez el camarero se encuentra atendiendo a un cliente tarda un tiempo aleatorio en su preparación (Entre 1-20 segundos) si al
+    finalizar el café el tiempo que ha llevado su preparación no es superior al máximo tiempo que está dispuesto a esperar un 
+    cliente este se marchará satisfecho, en caso contrario se marchará enfadado y sin su café.
+    \section{Requisitos funcionales de la aplicación}
+    Los requisitos funcionales del sistema son los siguientes:
+    \begin{itemize}
+        \item \texttt{RF-1:} Cada cliente se comportará como un hilo (Thread) independiente que simula su llegada a la cafetería.
+        \item \texttt{RF-2:} Cada camarero se comportará como un hilo (Thread) que atiende a un cliente.
+        \item \texttt{RF-3:} Cada cliente debe poder esperar su café durante el tiempo definido en tiempoEspera. Si el café no está listo en ese tiempo, el cliente se marcha sin recibirlo.
+        \item \texttt{RF-4:} Los camareros deben tener un método prepararCafe(Cliente c) que simule la preparación del café mediante Thread.sleep() durante un tiempo aleatorio.
+        \item \texttt{RF-5:} Si un cliente se marcha antes de que su café esté listo, el camarero debe continuar con el siguiente cliente disponible.
+        \item \texttt{RF-6:} La simulación debe continuar hasta que todos los clientes hayan recibido su café o se hayan marchado por exceder su tiempo de espera.
+    \end{itemize}
+    \section{Requisitos no funcionales}
+    Los requisitos no funcionales del sistema son los siguientes:
+    \begin{itemize}
+        \item \texttt{RNF-1:} La aplicación debe poder manejar múltiples clientes y camareros de manera concurrente.
+        \item \texttt{RNF-2:} La aplicación debe actualizar los estados de los clientes en la interfaz.
+        \item \texttt{RNF-3:} La aplicación debe funcionar correctamente aun que varios clientes llegan al mismo tiempo.
+        \item \texttt{RNF-4:} La interfaz debe ser clara y fácil de entender, mostrando visualmente el estado de cada cliente en tiempo real.
+    \end{itemize}
+    \section{Casos de uso}
+    A continuación se expone un diagrama general de casos de uso de la aplicación:
+    \begin{center}
+    \begin{tabularx}{0.8\textwidth}{|X|X|}
+        \hline
+        \textbf{Caso de uso} & \textbf{Descripción} \\
+        \hline
+        Inicio de la simulación & El usuario pulsa el botón de inicio para lanzar la simulación de la cafetería; se crean los hilos de clientes y camareros y se inicializan las listas de la UI. \\            
+        \hline
+        Llegada de clientes & Cada cliente llega como un hilo independiente, se registra en la lista de espera y empieza a contar su tiempo máximo de espera. \\
+        \hline
+        Atención por camarero & Los camareros atienden a los clientes en orden de llegada, preparan el café (Simulado con Thread.sleep) y actualizan el estado del cliente en la interfaz. \\
+        \hline
+        Cliente atendido & Cuando el café está listo dentro del tiempo de espera del cliente, el cliente se traslada a la lista de completados en color verde. \\
+        \hline
+        Cliente insatisfecho & Si el tiempo de espera del cliente se supera antes de recibir su café, se traslada a la lista de completados en color rojo. \\
+        \hline
+        Finalización de la simulación & La aplicación termina la simulación automáticamente cuando todos los clientes han sido atendidos o se han marchado. \\
+        \hline  
+    \end{tabularx}
+    \end{center}
+    \section{Historias de usuario}
+    \begin{center}  
+    \begin{tabularx}{0.8\textwidth}{|X|X|X|X|}
+        \hline
+        \textbf{ID} & \textbf{Como...} & \textbf{Quiero...} & \textbf{Para...} \\
+        \hline
+        HU-01 & Usuario & Iniciar la simulación de la cafetería & Ver cómo los clientes y camareros interactúan en tiempo real \\            
+        \hline
+        HU-02 & Cliente & Llegar a la cafetería con un tiempo de espera definido & Intentar conseguir un café antes de que se agote mi paciencia \\            
+        \hline
+        HU-03 & Camarero & Atender a los clientes por orden de llegada & Tratar de preparar todos los cafés \\            
+        \hline
+        HU-04 & Cliente & Recibir mi café dentro del tiempo de espera & Estar satisfecho y abandonar la cafetería correctamente atendido \\            
+        \hline
+        HU-05 & Cliente & Marcharme si mi tiempo de espera se agota & Reflejar que no he sido atendido y liberar espacio en la lista de espera \\            
+        \hline
+        HU-06 & Usuario & Ver el estado de cada cliente en la interfaz & Comprender visualmente el funcionamiento de la simulación \\            
+        \hline
+        HU-07 & Sistema & Finalizar automáticamente la simulación & Indicar que todos los clientes han sido atendidos o se han marchado \\            
+        \hline  
+    \end{tabularx}
+    \end{center}
+    \section{Arquitectura de la Aplicación}
+    La aplicación se organiza siguiendo una arquitectura por capas que separa la interfaz de usuario y la lógica (Similar al modelo vista-controlador).
+    \begin{itemize}
+        \item \textbf{Capa de interfaz (UI):} Vista diseñada con FXML.
+        \item \textbf{Capa de lógica:} Clases, gestión de hilos...
+    \end{itemize}
+    \section{Flujo de datos}
+    \begin{enumerate}
+        \item La cafetería se abre (Se inician los hilos).
+        \item Los clientes llegan a la cafetería.
+        \item Los clientes son atendidos por los camareros.
+        \item Los clientes abandonan la cafetería atendidos correctamente o no.
+    \end{enumerate}
+    \section{Tecnologías utilizadas}
+        \subsection{Frontend:}
+            \begin{itemize}
+                \item Lenguaje: FXML
+                \item Tecnologias: JavaFX, Scene Builder
+            \end{itemize}
+        \subsection{Backend:}
+            \begin{itemize}
+                \item Lenguaje: Java
+                \item Tecnologias: JavaFX
+            \end{itemize}    
+    \section{Clases e Interfaces}
+    A continuación se describen las principales clases e interfaces que componen el programa. 
+        \subsection{Launcher.java}
+        Inicia la aplicación y llama a HelloAplication.java.
+        \subsection{HelloController.java}
+        Actua como el Main.java, en el se crean las instancias de camareros, clientes, la lista de clientes y camareros 
+        y se inician los hilos.
+        Esta clase contiene las siguientes varibles y funciones:
+        \begin{itemize}
+            \item \texttt{clientesEspera:} VBox que contendrá los clientes en espera de ser atendidos.
+            \item \texttt{clientesAtendiendo:} VBox que contendrá los clientes que están siendo atendidos.
+            \item \texttt{clientesAtendidos:} VBox que contendrá los clientes que ya han sido atendidos.
+            \vspace{0.3cm}
+            \item \texttt{listaClientes:} ArrayList conteniendo todas las instancias de clientes.
+            \item \texttt{listaCamareros:} ArrayList conteniendo todas las instancias de camareros.
+            \vspace{0.3cm}
+            \item \texttt{inicioCafeteria:} Función que inicia la aplicación, se inicia en un nuevo hilo para no bloquear el hilo del UI.
+            \item \texttt{actualizarEstadoCliente:} Recibe el nombre de un cliente y su estado de la clase Camarero.java o Cliente.java para actualizar las listas.
+            \item \texttt{eliminarClienteLista:} Recibe un VBox(clientesEspera/clientesAtendiendo/clientesAtendidos) desde actualizarEstadoCliente para eliminarlo de las listas
+            antes de cambiar el cliente de lista para evitar duplicados.
+        \end{itemize}
+    \subsection{HelloAplication.java}
+    Inicia la venta y llama a HelloController al ser llamado desde Launcher.java, además asigna el tamaño de la ventana.
+    \subsection{Camarero.java}
+    Clase que define a la entidad de Camarero, contiene un constructor con los atributos:
+    \begin{itemize}
+        \item \texttt{nombreCamarero:} String que determina el nombre del camarero (Su funcionalidad solo se aplica en el terminal).
+        \item \texttt{listaClientes:} List<Cliente> lista sincronizada entre todo el programa conteniendo los clientes.
+        \item \texttt{HelloController:} Instancia de HelloController.
+    \end{itemize}
+    Además, contiene los siguientes métodos:
+    \begin{itemize}
+        \item \texttt{run:} Método heredado de Thread, que recorre la lista sincronizada, mantiene en espera al camarero en caso de estar vacia
+        y cuando recibe un cliente lo envía al método prepararCafe.
+        \item \texttt{prepararCafe:} Recibe un cliente desde run, establece un tiempo de preparación, comprueba si este es menor al máximo tiempo
+        de espera de un cliente para comprobar si este se marcha con su café o no. Además, envia los datos necesarios a HelloController.actualizarEstadoCliente.
+    \end{itemize}
+    \subsection{Cliente.java} 
+    Clase que define a la entidad Cliente, contiene un constructor con los atributos:
+    \begin{itemize}
+        \item \texttt{nombreCliente:} String que determina el nombre del cliente (Su funcionalidad solo se aplica en el terminal).
+        \item \texttt{tiempoEspera:} Int que determina el tiempo de espera máximo que está dispuesto a esperar un cliente para ser atendido.
+        \item \texttt{atendido:} Boolean que determina si un cliente ha sido atendido o no (Variable de control para saber si un cliente ha sido atendido o no).
+        \item \texttt{listaClientes:} List<Cliente> lista sincronizada entre todo el programa conteniendo los clientes.
+        \item \texttt{HelloController:} Instancia de HelloController.
+    \end{itemize}
+    Además, contiene el siguiente método:
+    \begin{itemize}
+        \item \texttt{run:} Método heredado de Thread, informa de la llegada de un cliente a la cafetería y manda la información a HelloController.actualizarEstadoCliente
+        y además elimina al cliente atendido de la lista.
+    \end{itemize}
+    \subsection{hello-view.fxml (Interfaz de usuario)}
+    Contiene el fondo del programa, las listas entre las que iteran los clientes y el botón de inicio de la aplicación, todo ello empleando FXML.
+    \section{Bibliografía}
+    \begin{thebibliography}{9}
+
+    \bibitem{geeksforgeeks}
+    Geeks for geeks. \textit{Java notify() Method in Threads Synchronization with Examples}. 
+    Disponible en: \url{https://www.geeksforgeeks.org/java/java-notify-method-in-threads-synchronization-with-examples/}.
+
+    \bibitem{chatgpt} OpenAI. ChatGPT \textit{Explicación de Platform.runLater} \url{https://chatgpt.com}
+
+    \end{thebibliography}
+
+\end{document} 
