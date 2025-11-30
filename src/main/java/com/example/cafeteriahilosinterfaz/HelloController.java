@@ -1,24 +1,35 @@
 package com.example.cafeteriahilosinterfaz;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HelloController {
+    int contadorClientesNombre = 0;
 
     // Declaración de listas
     @FXML private VBox clientesEspera;
     @FXML private VBox clientesAtendiendo;
     @FXML private VBox clientesTerminados;
 
+    // Lista de clientes
+    ArrayList<Cliente> listaClientes = new ArrayList<>();
+
+    // Lista camareros
+    ArrayList<Camarero> listaCamareros = new ArrayList<>();
+
     // Función principal (Main.java)
     @FXML
     public void inicioCafeteria() throws InterruptedException {
         new Thread(() -> {
+            /*
             // Lista de clientes
             ArrayList<Cliente> listaClientes = new ArrayList<>();
 
@@ -34,6 +45,7 @@ public class HelloController {
             Cliente clienteSeis = new Cliente("María Lopez", 11000, listaClientes, this);
             Cliente clienteSiete = new Cliente("Carlos Ruiz", 10000, listaClientes, this);
             Cliente clienteOcho = new Cliente("Ana Gomez", 16000, listaClientes, this);
+            */
 
             // Camareros
             Camarero camareroUno = new Camarero("Camarero Uno", listaClientes, this);
@@ -45,6 +57,7 @@ public class HelloController {
             camareroUno.start();
             camareroDos.start();
 
+            /*
             // Inicio de clientes
             Cliente[] clientes = {clienteUno, clienteDos, clienteTres, clienteCuatro, clienteCinco, clienteSeis, clienteSiete, clienteOcho};
             for (Cliente c : clientes) {
@@ -56,6 +69,7 @@ public class HelloController {
                     throw new RuntimeException(e);
                 }
             }
+
 
             // Join de clientes
             for (Cliente c : clientes) {
@@ -69,7 +83,7 @@ public class HelloController {
             // Interrumpe a los camareros para salir del bucle
             for (Camarero camarero : listaCamareros) {
                 camarero.interrupt();
-            }
+            }*/
 
             for (Camarero camarero : listaCamareros) {
                 try {
@@ -120,5 +134,28 @@ public class HelloController {
             }
             return false;
         });
+    }
+
+    // Cerrar cafetería
+    @FXML
+    public void cerrarCafeteria() {
+        for (Camarero camarero : listaCamareros) {
+            camarero.interrupt();
+        }
+        System.exit(1);
+    }
+
+    @FXML
+    public void addCliente() throws InterruptedException {
+        contadorClientesNombre++;
+        String nombreCliente = "Cliente" + contadorClientesNombre;
+        int tiempoEspera = (int) (Math.random() * 21000) + 3000;
+        Cliente cliente = new Cliente(nombreCliente, tiempoEspera, listaClientes, this);
+        if (listaClientes.isEmpty()) {
+            cliente.start();
+        }
+        else {
+            cliente.join();
+        }
     }
 }
