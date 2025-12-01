@@ -7,6 +7,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.skin.SplitPaneSkin.Content?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="fondo" stylesheets="@style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cafeteriahilosinterfaz.HelloController">
    <children>
       <VBox layoutX="172.0" layoutY="150.0" prefHeight="278.0" prefWidth="400.0" styleClass="panel" stylesheets="@style.css">
@@ -19,11 +21,14 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </Text>
-            <VBox fx:id="clientesEspera" prefHeight="306.0" prefWidth="400.0">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </VBox>
+             <ScrollPane prefHeight="306.0" prefWidth="400.0" fitToWidth="true" pannable="true"
+                         style="-fx-background-color: transparent;">
+                 <VBox fx:id="clientesEspera" prefHeight="306.0" prefWidth="400.0">
+                     <VBox.margin>
+                         <Insets top="20.0"/>
+                     </VBox.margin>
+                 </VBox>
+             </ScrollPane>
          </children>
       </VBox>
       <VBox layoutX="800.0" layoutY="150.0" prefHeight="278.0" prefWidth="400.0" styleClass="panel" stylesheets="@style.css">
@@ -36,11 +41,14 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </Text>
-            <VBox fx:id="clientesAtendiendo" prefHeight="306.0" prefWidth="400.0">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </VBox>
+             <ScrollPane prefHeight="306.0" prefWidth="400.0" fitToWidth="true" pannable="true"
+                         style="-fx-background-color: transparent;">
+                 <VBox fx:id="clientesAtendiendo" prefHeight="306.0" prefWidth="400.0">
+                     <VBox.margin>
+                         <Insets top="20.0"/>
+                     </VBox.margin>
+                 </VBox>
+             </ScrollPane>
          </children>
       </VBox>
       <VBox layoutX="1388.0" layoutY="150.0" prefHeight="278.0" prefWidth="400.0" styleClass="panel" stylesheets="@style.css">
@@ -53,11 +61,14 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </Text>
-            <VBox fx:id="clientesTerminados" prefHeight="306.0" prefWidth="400.0">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </VBox>
+             <ScrollPane prefHeight="306.0" prefWidth="400.0" fitToWidth="true" pannable="true"
+                         style="-fx-background-color: transparent;">
+                 <VBox fx:id="clientesTerminados" prefHeight="306.0" prefWidth="400.0">
+                     <VBox.margin>
+                         <Insets top="20.0"/>
+                     </VBox.margin>
+                 </VBox>
+             </ScrollPane>
          </children>
       </VBox>
       <Button fx:id="botonInicio" layoutX="500.0" layoutY="881.0" mnemonicParsing="false" onAction="#inicioCafeteria" prefHeight="70.0" prefWidth="258.0" styleClass="botonInicio" stylesheets="@style.css" text="Abrir Cafeteria">
@@ -85,11 +96,14 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </Text>
-            <VBox fx:id="camareros" prefHeight="306.0" prefWidth="400.0">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </VBox>
+             <ScrollPane prefHeight="306.0" prefWidth="400.0" fitToWidth="true" pannable="true"
+                         style="-fx-background-color: transparent;">
+                 <VBox fx:id="camareros" prefHeight="306.0" prefWidth="400.0">
+                     <VBox.margin>
+                         <Insets top="20.0"/>
+                     </VBox.margin>
+                 </VBox>
+             </ScrollPane>
          </children>
       </VBox>
       <VBox layoutX="1100.0" layoutY="513.0" prefHeight="278.0" prefWidth="400.0" styleClass="panel" stylesheets="@style.css">
@@ -102,11 +116,14 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </Text>
-            <VBox fx:id="barista" prefHeight="306.0" prefWidth="400.0">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </VBox>
+             <ScrollPane prefHeight="306.0" prefWidth="400.0" fitToWidth="true" pannable="true"
+                         style="-fx-background-color: transparent;">
+                 <VBox fx:id="barista" prefHeight="306.0" prefWidth="400.0">
+                     <VBox.margin>
+                         <Insets top="20.0"/>
+                     </VBox.margin>
+                 </VBox>
+             </ScrollPane>
          </children>
       </VBox>
    </children>

@@ -45,5 +45,6 @@ public class Camarero extends Thread {
         System.out.println("El camarero " + nombreCamarero + " ha servido el café del cliente " + cliente.nombreCliente);
         cliente.atendido = true;
         controller.actualizarEstadoCliente(cliente.nombreCliente, "salidoContento");
+        controller.actualizarEstadoBarista("Café preparado (" + buffer.get() + "/5)");
     }
 }
