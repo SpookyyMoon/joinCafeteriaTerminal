@@ -1,15 +1,12 @@
 package com.example.cafeteriahilosinterfaz;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HelloController {
     int contadorClientesNombre = 0;
@@ -18,6 +15,7 @@ public class HelloController {
     @FXML private VBox clientesEspera;
     @FXML private VBox clientesAtendiendo;
     @FXML private VBox clientesTerminados;
+    @FXML private VBox barista;
 
     // Lista de clientes
     ArrayList<Cliente> listaClientes = new ArrayList<>();
@@ -47,9 +45,16 @@ public class HelloController {
             Cliente clienteOcho = new Cliente("Ana Gomez", 16000, listaClientes, this);
             */
 
+            // Buffer
+            Buffer buffer = new Buffer();
+
+            // Barista
+            Barista baristaUno = new Barista(buffer, this);
+            baristaUno.start();
+
             // Camareros
-            Camarero camareroUno = new Camarero("Camarero Uno", listaClientes, this);
-            Camarero camareroDos = new Camarero("Camarero Dos", listaClientes, this);
+            Camarero camareroUno = new Camarero("Camarero Uno", listaClientes, this, buffer);
+            Camarero camareroDos = new Camarero("Camarero Dos", listaClientes, this, buffer);
 
             listaCamareros.add(camareroUno);
             listaCamareros.add(camareroDos);
@@ -124,6 +129,18 @@ public class HelloController {
                     clientesTerminados.getChildren().add(etiqueta);
                 }
             }
+        });
+    }
+
+
+    public void actualizarEstadoBarista(String estado) {
+        Platform.runLater(() -> {
+            barista.getChildren().clear(); // Limpia el log
+            Label etiqueta = new Label(estado);
+            etiqueta.setStyle("-fx-text-fill: #57ac57; -fx-font-size: 25px; -fx-font-family: Poppins; -fx-text-alignment: center");
+            etiqueta.setMaxWidth(Double.MAX_VALUE);
+            etiqueta.setAlignment(Pos.CENTER);
+            barista.getChildren().add(etiqueta);
         });
     }
 

@@ -6,11 +6,13 @@ public class Camarero extends Thread {
     String nombreCamarero;
     List<Cliente> listaClientes;
     HelloController controller;
+    Buffer buffer;
 
-    public Camarero(String nombreCamarero, List<Cliente> listaClientes, HelloController controller) {
+    public Camarero(String nombreCamarero, List<Cliente> listaClientes, HelloController controller, Buffer buffer) {
         this.nombreCamarero = nombreCamarero;
         this.listaClientes = listaClientes;
         this.controller = controller;
+        this.buffer = buffer;
     }
 
     @Override
@@ -30,29 +32,18 @@ public class Camarero extends Thread {
                 cliente = listaClientes.remove(0); // Borra el cliente atendido de la lista
             }
 
-            prepararCafe(cliente);
+            servirCafe(cliente);
         }
 
         System.out.println(nombreCamarero + " ha terminado su turno.");
     }
 
-    private void prepararCafe(Cliente cliente) {
-        int tiempoPreparacion = (int) (Math.random() * 20000);
-        System.out.println(nombreCamarero + " está preparando el café de " + cliente.nombreCliente + ".");
+    private void servirCafe(Cliente cliente) {
+        System.out.println("El camarero " + nombreCamarero + " va a servir el café del cliente  " + cliente.nombreCliente);
         controller.actualizarEstadoCliente(cliente.nombreCliente, "atendido");
-
-        try {
-            Thread.sleep(tiempoPreparacion);
-        } catch (InterruptedException e) {
-            return;
-        }
-
-        if (tiempoPreparacion <= cliente.tiempoEspera) {
-            cliente.atendido = true;
-            System.out.println(nombreCamarero + " ha servido el café a " + cliente.nombreCliente + ".");
-            controller.actualizarEstadoCliente(cliente.nombreCliente, "salidoContento");
-        } else {
-            System.out.println(nombreCamarero + " ha terminado el café, pero " + cliente.nombreCliente + " ya se había ido.");
-        }
+        buffer.reduce(); // Consume un café del buffer
+        System.out.println("El camarero " + nombreCamarero + " ha servido el café del cliente " + cliente.nombreCliente);
+        cliente.atendido = true;
+        controller.actualizarEstadoCliente(cliente.nombreCliente, "salidoContento");
     }
 }

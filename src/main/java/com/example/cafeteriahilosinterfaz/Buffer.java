@@ -13,6 +13,7 @@ public class Buffer {
             }
         }
         cantidadCafe++;
+        System.out.println("El barita ha preparado más cafe! Cantidad total: " + cantidadCafe + "/" + cantidadCafeMaxima);
         notifyAll();
     }
 
@@ -21,7 +22,7 @@ public class Buffer {
     }
 
     public synchronized void reduce() {
-        while(cantidadCafe < 0) {
+        while(cantidadCafe == 0) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -29,6 +30,7 @@ public class Buffer {
             }
         }
         cantidadCafe--;
+        System.out.println("Los camareros han servidor un café! Cantidad total: " + cantidadCafe + "/" + cantidadCafeMaxima);
         notifyAll();
     }
 }
