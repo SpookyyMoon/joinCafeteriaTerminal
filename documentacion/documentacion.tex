@@ -17,7 +17,7 @@
     \vspace{2cm}
     {\scshape\Huge Documentación de Arquitectura de Software y Requisitos funcionales\par}
     \vspace{1cm}
-    {\scshape\Large cafetería mediante hilos de Java\par}
+    {\scshape\Large Modelo productor consumidor en Cafeteria mediante hilos\par}
     \vspace{5cm}
     \vfill
     {\Large Jacobo Pérez de Torres\par}
@@ -30,27 +30,32 @@
     llegan a la cafetería siguiendo el orden de la lista y con un retraso aleatorio (Entre 1-3 segundos).
     Los clientes tienen un tiempo de espera máximo que pueden tardar en ser atendidos antes de abandonar el local sin su
     café.
+    Esta versión es una modificación sobre la anterior en la que se ha añadido el modelo Productor-Consumidor. Ahora existe un
+    barista (Productor) que produce cafés almacenados en un buffer hasta un máximo de cinco. El camarero (Consumidor) los retira
+    del buffer y se los entrega a un cliente.
 
     \vspace{0.5cm}
-
-    \noindent Cuando un camarero se libera de su trabajo escoge a el cliente que se encuentre primero en la lista (Organizada por orden
-    de llegada), una vez el camarero se encuentra atendiendo a un cliente tarda un tiempo aleatorio en su preparación (Entre 1-20 segundos) si al
-    finalizar el café el tiempo que ha llevado su preparación no es superior al máximo tiempo que está dispuesto a esperar un 
-    cliente este se marchará satisfecho, en caso contrario se marchará enfadado y sin su café.
+    \noindent El barista se encuentra continuamente produciendo café siempre y cuando el buffer no esté lleno, en caso de estarlo para y espera hasta que
+    este tiene hueco. Los camareros atienden a los clientes de la misma forma que anteriormente salvo que ahora el tiempo de preparación del café depende
+    de las existencias y del tiempo de preparación que tarden los baristas.
+    Igual que anteriormente si al entregarse el café al cliente el tiempo que ha llevado su preparación no es superior al máximo tiempo que está dispuesto a
+    esperar ese cliente este se marchará satisfecho, en caso contrario se marchará enfadado y sin su café.
     \section{Requisitos funcionales de la aplicación}
     Los requisitos funcionales del sistema son los siguientes:
     \begin{itemize}
         \item \texttt{RF-1:} Cada cliente se comportará como un hilo (Thread) independiente que simula su llegada a la cafetería.
         \item \texttt{RF-2:} Cada camarero se comportará como un hilo (Thread) que atiende a un cliente.
-        \item \texttt{RF-3:} Cada cliente debe poder esperar su café durante el tiempo definido en tiempoEspera. Si el café no está listo en ese tiempo, el cliente se marcha sin recibirlo.
-        \item \texttt{RF-4:} Los camareros deben tener un método prepararCafe(Cliente c) que simule la preparación del café mediante Thread.sleep() durante un tiempo aleatorio.
-        \item \texttt{RF-5:} Si un cliente se marcha antes de que su café esté listo, el camarero debe continuar con el siguiente cliente disponible.
-        \item \texttt{RF-6:} La simulación debe continuar hasta que todos los clientes hayan recibido su café o se hayan marchado por exceder su tiempo de espera.
+        \item \texttt{RF-3:} El barista tendrá un método prepararCafe que preparará cafés tardando un tiempo aleatorio. Se repetirá hasta llenar el buffer.
+        \item \texttt{RF-4:} El camarero se comportará como consumidor del modelo, consumiendo los cafés generados por el barista.
+        \item \texttt{RF-5:} Cada cliente debe poder esperar su café durante el tiempo definido en tiempoEspera. Si el café no está listo en ese tiempo, el cliente se marcha sin recibirlo.
+        \item \texttt{RF-6:} Los camareros deben tener un método servirCafe(Cliente c) que simule entregar el café a cada cliente.
+        \item \texttt{RF-7:} Si un cliente se marcha antes de que su café esté listo, el camarero debe continuar con el siguiente cliente disponible.
+        \item \texttt{RF-8:} La simulación debe continuar hasta que todos los clientes hayan recibido su café o se hayan marchado por exceder su tiempo de espera.
     \end{itemize}
     \section{Requisitos no funcionales}
     Los requisitos no funcionales del sistema son los siguientes:
     \begin{itemize}
-        \item \texttt{RNF-1:} La aplicación debe poder manejar múltiples clientes y camareros de manera concurrente.
+        \item \texttt{RNF-1:} La aplicación debe poder manejar múltiples clientes y camareros de manera concurrente ademas de un barista.
         \item \texttt{RNF-2:} La aplicación debe actualizar los estados de los clientes en la interfaz.
         \item \texttt{RNF-3:} La aplicación debe funcionar correctamente aun que varios clientes llegan al mismo tiempo.
         \item \texttt{RNF-4:} La interfaz debe ser clara y fácil de entender, mostrando visualmente el estado de cada cliente en tiempo real.
@@ -64,9 +69,11 @@
         \hline
         Inicio de la simulación & El usuario pulsa el botón de inicio para lanzar la simulación de la cafetería; se crean los hilos de clientes y camareros y se inicializan las listas de la UI. \\            
         \hline
-        Llegada de clientes & Cada cliente llega como un hilo independiente, se registra en la lista de espera y empieza a contar su tiempo máximo de espera. \\
+        Preparación de cafés & El barista comienza a preparar cafés hasta llenar el buffer, tras llenarlo se pone en espera hasta que el buffer tiene espacio. \\
         \hline
-        Atención por camarero & Los camareros atienden a los clientes en orden de llegada, preparan el café (Simulado con Thread.sleep) y actualizan el estado del cliente en la interfaz. \\
+        Llegada de clientes & Cada cliente llega como un hilo independiente cuando se pulsa el botón de "Nuevo cliente", se registra en la lista de espera y empieza a contar su tiempo máximo de espera. \\
+        \hline
+        Atención por camarero & Los camareros atienden a los clientes en orden de llegada, recogiendo el café del buffer en caso de haber existencias.. \\
         \hline
         Cliente atendido & Cuando el café está listo dentro del tiempo de espera del cliente, el cliente se traslada a la lista de completados en color verde. \\
         \hline
@@ -84,17 +91,19 @@
         \hline
         HU-01 & Usuario & Iniciar la simulación de la cafetería & Ver cómo los clientes y camareros interactúan en tiempo real \\            
         \hline
-        HU-02 & Cliente & Llegar a la cafetería con un tiempo de espera definido & Intentar conseguir un café antes de que se agote mi paciencia \\            
+        HU-02 & Barista & Iniciar preparación de cafés & Generar cafés hasta llenar el buffer \\            
         \hline
-        HU-03 & Camarero & Atender a los clientes por orden de llegada & Tratar de preparar todos los cafés \\            
+        HU-03 & Cliente & Llegar a la cafetería con un tiempo de espera definido & Intentar conseguir un café antes de que se agote mi paciencia \\            
         \hline
-        HU-04 & Cliente & Recibir mi café dentro del tiempo de espera & Estar satisfecho y abandonar la cafetería correctamente atendido \\            
+        HU-04 & Camarero & Atender a los clientes por orden de llegada & Tratar de preparar todos los cafés \\            
         \hline
-        HU-05 & Cliente & Marcharme si mi tiempo de espera se agota & Reflejar que no he sido atendido y liberar espacio en la lista de espera \\            
+        HU-05 & Cliente & Recibir mi café dentro del tiempo de espera & Estar satisfecho y abandonar la cafetería correctamente atendido \\            
         \hline
-        HU-06 & Usuario & Ver el estado de cada cliente en la interfaz & Comprender visualmente el funcionamiento de la simulación \\            
+        HU-06 & Cliente & Marcharme si mi tiempo de espera se agota & Reflejar que no he sido atendido y liberar espacio en la lista de espera \\            
         \hline
-        HU-07 & Sistema & Finalizar automáticamente la simulación & Indicar que todos los clientes han sido atendidos o se han marchado \\            
+        HU-07 & Usuario & Ver el estado de cada cliente en la interfaz & Comprender visualmente el funcionamiento de la simulación \\            
+        \hline
+        HU-08 & Sistema & Finalizar automáticamente la simulación & Indicar que todos los clientes han sido atendidos o se han marchado \\            
         \hline  
     \end{tabularx}
     \end{center}
@@ -107,6 +116,7 @@
     \section{Flujo de datos}
     \begin{enumerate}
         \item La cafetería se abre (Se inician los hilos).
+        \item El barista comienza a preparar café.
         \item Los clientes llegan a la cafetería.
         \item Los clientes son atendidos por los camareros.
         \item Los clientes abandonan la cafetería atendidos correctamente o no.
@@ -134,6 +144,7 @@
             \item \texttt{clientesEspera:} VBox que contendrá los clientes en espera de ser atendidos.
             \item \texttt{clientesAtendiendo:} VBox que contendrá los clientes que están siendo atendidos.
             \item \texttt{clientesAtendidos:} VBox que contendrá los clientes que ya han sido atendidos.
+            \item \texttt{barista}: Vbox conteniendo al barista.
             \vspace{0.3cm}
             \item \texttt{listaClientes:} ArrayList conteniendo todas las instancias de clientes.
             \item \texttt{listaCamareros:} ArrayList conteniendo todas las instancias de camareros.
@@ -142,6 +153,18 @@
             \item \texttt{actualizarEstadoCliente:} Recibe el nombre de un cliente y su estado de la clase Camarero.java o Cliente.java para actualizar las listas.
             \item \texttt{eliminarClienteLista:} Recibe un VBox(clientesEspera/clientesAtendiendo/clientesAtendidos) desde actualizarEstadoCliente para eliminarlo de las listas
             antes de cambiar el cliente de lista para evitar duplicados.
+            \item \texttt{actualizarEstadoBarista}: Recibe la cantidad de café preparada que tiene actualmente el buffer y la muestra. Se actualiza al consumir o producir.
+            \item \texttt{actualizarEstadoBarista}: Recibe información de camarero y va registrando un log constante de las acciones de los camareros.
+        \end{itemize}
+    \subsection{Buffer.java}
+        Buffer que almacena el café existente, al que pueden acceder camareros y el barista. Contiene también los métodos de añadir y restar existencias de café-
+        \begin{itemize}
+            \item \texttt{cantidadCafe:} Cantidad de café existente en el buffer.
+            \item \texttt{cantidadCafeMaxima:} Cantidad máxima de café que puede almacenar el buffer.
+            \item \texttt{clientesAtendidos:} VBox que contendrá los clientes que ya han sido atendidos.
+            \vspace{0.3cm}
+            \item \texttt{add:} Método que añade café desde el barista.
+            \item \texttt{reduce:} Método que reduce el café desde el camarero.
         \end{itemize}
     \subsection{HelloAplication.java}
     Inicia la venta y llama a HelloController al ser llamado desde Launcher.java, además asigna el tamaño de la ventana.
@@ -150,15 +173,30 @@
     \begin{itemize}
         \item \texttt{nombreCamarero:} String que determina el nombre del camarero (Su funcionalidad solo se aplica en el terminal).
         \item \texttt{listaClientes:} List<Cliente> lista sincronizada entre todo el programa conteniendo los clientes.
-        \item \texttt{HelloController:} Instancia de HelloController.
+        \item \texttt{controller:} Instancia de HelloController.
+        \item \texttt{buffer:} Instancia de Buffer.
+
     \end{itemize}
     Además, contiene los siguientes métodos:
     \begin{itemize}
         \item \texttt{run:} Método heredado de Thread, que recorre la lista sincronizada, mantiene en espera al camarero en caso de estar vacia
-        y cuando recibe un cliente lo envía al método prepararCafe.
-        \item \texttt{prepararCafe:} Recibe un cliente desde run, establece un tiempo de preparación, comprueba si este es menor al máximo tiempo
-        de espera de un cliente para comprobar si este se marcha con su café o no. Además, envia los datos necesarios a HelloController.actualizarEstadoCliente.
+        y cuando recibe un cliente lo envía al método servirCafe.
+        \item \texttt{servirCafe:} Recibe un cliente desde run, sirve el café al cliente en caso de ser posible. Actualiza además el estado del cliente y del barista 
+        en la interfaz tras restar una unidad de café al buffer.
     \end{itemize}
+    \subsection{Barista.java}
+    Clase que define a la entidad de Barista, contiene un constructor con los atributos:
+    \begin{itemize}
+        \item \texttt{buffer:} Contiene la instancia de Buffer.
+        \item \texttt{controller:} Contiene la instacia de HelloController
+        \item \texttt{HelloController:} Instancia de HelloController.
+    \end{itemize}
+    Además, contiene los siguientes métodos:
+    \begin{itemize}
+        \item \texttt{run:} Método heredado de Thread, establece un tiempo aleatorio de preparación y duerme el hilo durante ese tiempo. Tras esto, añade una unidad de café al buffer
+        \item y actualiza el estado en la interfaz.
+    \end{itemize}
+    
     \subsection{Cliente.java} 
     Clase que define a la entidad Cliente, contiene un constructor con los atributos:
     \begin{itemize}
@@ -175,15 +213,5 @@
     \end{itemize}
     \subsection{hello-view.fxml (Interfaz de usuario)}
     Contiene el fondo del programa, las listas entre las que iteran los clientes y el botón de inicio de la aplicación, todo ello empleando FXML.
-    \section{Bibliografía}
-    \begin{thebibliography}{9}
-
-    \bibitem{geeksforgeeks}
-    Geeks for geeks. \textit{Java notify() Method in Threads Synchronization with Examples}. 
-    Disponible en: \url{https://www.geeksforgeeks.org/java/java-notify-method-in-threads-synchronization-with-examples/}.
-
-    \bibitem{chatgpt} OpenAI. ChatGPT \textit{Explicación de Platform.runLater} \url{https://chatgpt.com}
-
-    \end{thebibliography}
 
 \end{document} 
