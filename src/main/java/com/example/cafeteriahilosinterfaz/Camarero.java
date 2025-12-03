@@ -39,9 +39,11 @@ public class Camarero extends Thread {
     }
 
     private void servirCafe(Cliente cliente) {
+        controller.actualizarEstadoCamarero(nombreCamarero, "Atendiendo a " + cliente.nombreCliente);
         System.out.println("El camarero " + nombreCamarero + " va a servir el café del cliente  " + cliente.nombreCliente);
         controller.actualizarEstadoCliente(cliente.nombreCliente, "atendido");
         buffer.reduce(); // Consume un café del buffer
+        controller.actualizarEstadoCamarero(nombreCamarero, "Ha servido café a " + cliente.nombreCliente);
         System.out.println("El camarero " + nombreCamarero + " ha servido el café del cliente " + cliente.nombreCliente);
         cliente.atendido = true;
         controller.actualizarEstadoCliente(cliente.nombreCliente, "salidoContento");

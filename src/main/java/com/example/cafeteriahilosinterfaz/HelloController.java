@@ -16,6 +16,7 @@ public class HelloController {
     @FXML private VBox clientesAtendiendo;
     @FXML private VBox clientesTerminados;
     @FXML private VBox barista;
+    @FXML private VBox camareros;
 
     // Lista de clientes
     ArrayList<Cliente> listaClientes = new ArrayList<>();
@@ -143,6 +144,17 @@ public class HelloController {
             barista.getChildren().add(etiqueta);
         });
     }
+
+    public void actualizarEstadoCamarero(String nombreCamarero, String mensaje) {
+        Platform.runLater(() -> {
+            Label etiqueta = new Label(nombreCamarero + ": " + mensaje);
+            etiqueta.setStyle("-fx-font-size: 15px; -fx-font-family: Poppins;");
+            etiqueta.setMaxWidth(Double.MAX_VALUE);
+            etiqueta.setAlignment(Pos.CENTER);
+            camareros.getChildren().add(etiqueta);
+        });
+    }
+
 
     private void eliminarClienteLista(VBox vbox, String nombreCliente) {
         vbox.getChildren().removeIf(node -> {
