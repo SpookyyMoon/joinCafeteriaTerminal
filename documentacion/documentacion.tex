@@ -24,6 +24,9 @@
     \vfill
     \end{titlepage}
 
+    \tableofcontents
+    \newpage
+
     \section{Introducción y descripción del problema}
     Esta aplicación simula el funcionamiento de una cafetería empleando una interfaz generada en JavaFX y el módulo de
     Thread de Java. Existen dos camareros (Hilos) que atienden concurrentemente a clientes (También hilos). Los clientes
@@ -132,6 +135,19 @@
                 \item Lenguaje: Java
                 \item Tecnologias: JavaFX
             \end{itemize}    
+    \section{Patrones de código utilizados}
+    Para el desarrollo de está aplicación se han utilizado dos patrones fundamentales que permiten estructurar la aplicación de forma clara y facilitar el trabajo e interacción entre los distintos hilos que intervienen:
+
+    \subsection{Modelo Vista–Controlador (MVC)}
+    La arquitectura de la aplicación sigue el patrón Vista–Controlador, separando la lógica del programa y la interfaz gráfica.  
+    La vista está construida con FXML y gestionada por JavaFX, mientras que el controlador (HelloController) actúa como intermediario entre la capa de interfaz y la lógica.  
+    El controlador recibe los eventos generados en la interfaz, actualiza las listas y el estado de cada cliente, y crea los hilos (clientes, camareros y barista).  
+
+    \subsection{Modelo Productor–Consumidor}
+    El segundo patrón aplicado es el modelo Productor–Consumidor, implementado mediante hilos que comparten un recurso común (Buffer).  
+    En este modelo, el barista actúa como productor, generando unidades de café y almacenándolas en el buffer hasta un máximo predefinido. Cuando el buffer está lleno, el barista se detiene y espera a que haya espacio disponible.  
+    Los camareros funcionan como consumidores: extraen unidades de café del buffer cada vez que deben atender a un cliente. Si el buffer está vacío, los camareros esperan hasta que el barista produzca nuevas unidades.  
+
     \section{Clases e Interfaces}
     A continuación se describen las principales clases e interfaces que componen el programa. 
         \subsection{Launcher.java}
